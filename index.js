@@ -2,7 +2,8 @@ import { fetchFlights } from './flightUtils.js'
 import { createFlightCards } from './markupMaker.js'
 
 async function handleClick() {
-    const API_TOKEN = '16f12abe30fcc9c81cadf685ba9106f0'
+    const API_TOKEN = 'a665724dbc8086dc3881e7433cfe937f'
+    //const API_TOKEN = '16f12abe30fcc9c81cadf685ba9106f0'
 
 
     try {
