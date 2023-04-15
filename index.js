@@ -1,7 +1,7 @@
 const access_key = '6d43e0c1a76a587aa7916067ef626d0a'
-const baseUrl = 'https://api.aviationstack.com/v1/'
-const requestUrl = `https://api.aviationstack.com/v1/flights?${access_key}`
-const cityRequestUrl = 'http://api.aviationstack.com/v1/cities?access_key=6d43e0c1a76a587aa7916067ef626d0a'
+const baseUrl = 'http://api.aviationstack.com/v1/'
+const requestUrl = `http://api.aviationstack.com/v1/flights?${access_key}`
+const cityRequestUrl = 'http://api.aviationstack.com/v1/cities?access_key=6d43e0c1a76a587aa7916067ef626d0a&search=london'
 
 const options = {
     limit: 1,
@@ -11,7 +11,9 @@ const options = {
 }
 // fetch(requestUrl, options)
 fetch(cityRequestUrl, options)
-
+.then(response => response.json())
+.then(response => console.log(response))
+.catch(err => console.error(err));
 /*
 const options1 = {
     method: 'POST',
