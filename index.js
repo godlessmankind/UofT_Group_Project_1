@@ -1,11 +1,13 @@
 import { fetchFlights } from './flightUtils.js'
 
 async function handleClick() {
-  const API_TOKEN = '6d43e0c1a76a587aa7916067ef626d0a'
+  const API_TOKEN = '16f12abe30fcc9c81cadf685ba9106f0'
 
+  const destination = document.querySelector('#flightField').value
+  console.log(document.querySelector('#flightField').value)
   const optionsObj = {
     dep_iata: 'JFK',
-    arr_iata: 'LHR',
+    arr_iata: destination,
     flight_status: 'scheduled',
     limit: 10,
   }
