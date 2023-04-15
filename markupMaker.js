@@ -14,8 +14,8 @@ function createFlightCards({data}) {
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Price: ${flight.price}</li>
-            <li class="list-group-item">Date: ${flight.date}</li>
-            <li class="list-group-item">Departure Time: ${flight.departureTime}</li>
+            <li class="list-group-item">Date: ${flight.flight_date}</li>
+            <li class="list-group-item">Departure Time: ${flight.arrival.scheduled}</li>
           </ul>
           <div class="card-body">
             <a href="#" class="card-link">Card link</a>
