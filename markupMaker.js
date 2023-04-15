@@ -42,7 +42,7 @@ function createFlightCards({data}) {
             </div>
             `
     }
-    console.log(markup)
+    // console.log(markup)
     return markup
 }
 
