@@ -1,27 +1,29 @@
 import { fetchFlights } from './flightUtils.js'
+import { createFlightCards } from './markupMaker.js'
 
 async function handleClick() {
   const API_TOKEN = '16f12abe30fcc9c81cadf685ba9106f0'
 
   const destination = document.querySelector('#flightField').value
-  console.log(document.querySelector('#flightField').value)
+  console.log(destination)
+
   const optionsObj = {
     dep_iata: 'JFK',
     arr_iata: destination,
     flight_status: 'scheduled',
     limit: 10,
   }
-  //const options = formatOptions(optionsObj)
 
   try {
     const flightData = await fetchFlights(API_TOKEN, optionsObj)
+    createFlightCards(flightData)
     console.log(flightData)
   } catch (error) {
     console.error(error)
   }
 }
 
-document.querySelector('#myButton').addEventListener('click', handleClick)
+document.querySelector('#searchFlights').addEventListener('click', handleClick)
 
 /*
 const access_key = '6d43e0c1a76a587aa7916067ef626d0a'
