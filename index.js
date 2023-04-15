@@ -12,3 +12,8 @@ fetch('https://skyscanner-api.p.rapidapi.com/v3e/flights/live/search/synced', op
 	.then(response => response.json())
 	.then(response => console.log(response))
 	.catch(err => console.error(err));
+
+const baseUri = `https://skyscanner-api.p.rapidapi.com/v3e/flights/live/search/synced'`
+
+// 6d43e0c1a76a587aa7916067ef626d0a
+
