@@ -1,6 +1,7 @@
 const access_key = '6d43e0c1a76a587aa7916067ef626d0a'
 const baseUrl = 'https://api.aviationstack.com/v1/'
 const requestUrl = `https://api.aviationstack.com/v1/flights?${access_key}`
+const cityRequestUrl = 'http://api.aviationstack.com/v1/cities?access_key=6d43e0c1a76a587aa7916067ef626d0a'
 
 const options = {
     limit: 1,
@@ -8,7 +9,8 @@ const options = {
     flight_date: '2023-04-25',
     arr_iata: 'SEA'
 }
-fetch(requestUrl, options)
+// fetch(requestUrl, options)
+fetch(cityRequestUrl, options)
 
 /*
 const options1 = {
