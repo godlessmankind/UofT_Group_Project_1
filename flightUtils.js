@@ -14,7 +14,7 @@ async function fetchFlights(API_KEY, options) {
     throw new Error('No API_KEY provided')
   }
   const optionQuery = formatOptions(options)
-  const data = await fetch(`${apiUrl}?access_key=${API_KEY}${optionQuery}`)
+  const data = await fetch(`${apiUrl}?access_key=${API_KEY}&${optionQuery}`)
   if (!data.ok) {
     throw new Error(`HTTP error: ${data.status}`)
   }
