@@ -4,19 +4,13 @@ import { createFlightCards } from './markupMaker.js'
 async function handleClick() {
     const API_TOKEN = '16f12abe30fcc9c81cadf685ba9106f0'
 
-    const destination = document.querySelector('#flightField').value
-    const iata = getIataFromJSON(destination)
-    console.log(iata)
-
-    const optionsObj = {
-        dep_iata: 'JFK',
-        arr_iata: iata,
-        flight_status: 'scheduled',
-        limit: 10,
-    }
 
     try {
-        const flightData = await fetchFlights(API_TOKEN, optionsObj)
+        const destination = document.querySelector('#flightField').value.toLowerCase()
+        console.log(destination)
+        const flightData = await fetchData(API_TOKEN, destination)
+        console.log(flightData)
+
         const cards = createFlightCards(flightData)
         if (!cards) {
             return
@@ -32,7 +26,60 @@ async function handleClick() {
 
 document.querySelector('#searchFlights').addEventListener('click', handleClick)
 
-function getIataFromJSON(city) {
+async function getIataFromJSON(city) {
+  try {
+    const response = await fetch('./iataCityMap.json');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch iataCityMap.json: ${response.statusText}`);
+    }
+    const data = await response.json();
+    const iataCode = data[city];
+    if (!iataCode) {
+      throw new Error(`No iataCode found for city: ${city}`);
+    }
+    return iataCode;
+  } catch (error) {
+    console.error(error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
+}
+
+
+async function fetchData(API_KEY, city) {
+  const depIataCodePromise = getIataFromJSON(city);
+  const optionsPromise = depIataCodePromise.then(depIataCode => {
+    return {
+      dep_iata: depIataCode,
+      arr_iata: 'JFK',
+      flight_status: 'scheduled',
+      limit: 100,
+    };
+  });
+  const [depIataCode, options] = await Promise.all([depIataCodePromise, optionsPromise]);
+  const flightsData = await fetchFlights(API_KEY, options, depIataCode);
+  console.log(flightsData);
+  return flightsData
+}
+
+
+/*async function fetchData(API_KEY, city) {
+  const depIataCode = await getIataFromJSON(city);
+  const options = {
+    dep_iata: depIataCode, // Use the value returned from getIataFromJSON here
+    arr_iata: 'JFK',
+    flight_status: 'scheduled',
+    limit: 100,
+  };
+  console.log(options, 'sum')
+  const flightsData = await fetchFlights(API_KEY, options, depIataCode); // Pass depIataCode here as well
+  console.log(flightsData);
+}
+
+// fetchData();
+
+/*
+
+async function getIataFromJSON(city) {
     fetch('./iataCityMap.json')
         .then(response => response.json())
         .then(data => {
