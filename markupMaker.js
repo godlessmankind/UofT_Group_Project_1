@@ -1,3 +1,14 @@
+function calculateFlightDuration(durationTimestamp, arrivalTimestamp) {
+    const departureTime = new Date(durationTimestamp)
+    const arrivalTime = new Date(arrivalTimestamp)
+
+    const durationMs = arrivalTime - departureTime
+    const durationMin = durationMs / (1000 * 60)
+
+    console.log(`The flight duration is ${durationMin} minutes.`)
+    return `${durationMin} minutes`
+}
+
 function createFlightCards({data}) {
   const { arrival } = data
   console.log(arrival)
@@ -13,7 +24,7 @@ function createFlightCards({data}) {
             <p class="card-text"></p>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Price: ${flight.price}</li>
+            <li class="list-group-item">Flight Duration: ${calculateFlightDuration(flight.departure.scheduled, flight.arrival.scheduled)}</li>
             <li class="list-group-item">Date: ${flight.flight_date}</li>
             <li class="list-group-item">Departure Time: ${flight.arrival.scheduled}</li>
           </ul>
