@@ -1,14 +1,28 @@
 import { fetchFlights } from './flightUtils.js'
 import { createFlightCards } from './markupMaker.js'
 
+const searchButton = document.querySelector('#searchFlights')
+const destinationFlightField = document.querySelector('#flightField')
+
 async function handleClick() {
     const API_TOKEN = 'a665724dbc8086dc3881e7433cfe937f'
     //const API_TOKEN = '16f12abe30fcc9c81cadf685ba9106f0'
 
-
     try {
-        const destination = document.querySelector('#flightField').value.toLowerCase()
+        const destination = destinationFlightField.value.toLowerCase()
         const flightData = await fetchData(API_TOKEN, destination)
+        if (flightData.data.length === 0) {
+            const alertEl = document.getElementById('alert');
+            alertEl.innerHTML = `Sorry but there are no flights found departing jfk for ${destination}`
+
+            alertEl.style.display = 'block';
+
+            setTimeout(function() {
+                alertEl.style.display = 'none';
+            }, 5000);
+
+            return
+        }
 
         const cards = createFlightCards(flightData)
         if (!cards) {
@@ -23,43 +37,49 @@ async function handleClick() {
     }
 }
 
-document.querySelector('#searchFlights').addEventListener('click', handleClick)
-
-async function getIataFromJSON(city) {
-  try {
-    const response = await fetch('./iataCityMap.json');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch iataCityMap.json: ${response.statusText}`);
+function handleInputKeypress(event) {
+    if (event.key === 'Enter') {
+        handleClick()
     }
-
-    const data = await response.json();
-    const iataCode = data[city];
-    if (!iataCode) {
-      throw new Error(`No iataCode found for city: ${city}`);
-    }
-
-    return iataCode;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
 }
 
+searchButton.addEventListener('click', handleClick)
+destinationFlightField.addEventListener('keypress', handleInputKeypress)
+
+async function getIataFromJSON(city) {
+    try {
+        const response = await fetch('./iataCityMap.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch iataCityMap.json: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const iataCode = data[city];
+        if (!iataCode) {
+            throw new Error(`No iataCode found for city: ${city}`);
+        }
+
+        return iataCode;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
 async function fetchData(API_KEY, city) {
-  const depIataCodePromise = getIataFromJSON(city);
-  const optionsPromise = depIataCodePromise.then(depIataCode => {
-    return {
-      dep_iata: depIataCode,
-      arr_iata: 'JFK',
-      flight_status: 'scheduled',
-      limit: 100,
-    };
-  });
-  const [depIataCode, options] = await Promise.all([depIataCodePromise, optionsPromise]);
-  const flightsData = await fetchFlights(API_KEY, options, depIataCode);
-  console.log(flightsData);
-  return flightsData
+    const depIataCodePromise = getIataFromJSON(city);
+    const optionsPromise = depIataCodePromise.then(depIataCode => {
+        return {
+            dep_iata: depIataCode,
+            arr_iata: 'JFK',
+            flight_status: 'scheduled',
+            limit: 100,
+        };
+    });
+    const [depIataCode, options] = await Promise.all([depIataCodePromise, optionsPromise]);
+    const flightsData = await fetchFlights(API_KEY, options, depIataCode);
+    console.log(flightsData);
+    return flightsData
 }
 
 /*

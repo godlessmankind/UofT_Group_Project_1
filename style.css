@@ -1,0 +1,13 @@
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: yellow;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  z-index: 9999;
+  display: none;
+}
