@@ -5,11 +5,12 @@ async function handleClick() {
     const API_TOKEN = '16f12abe30fcc9c81cadf685ba9106f0'
 
     const destination = document.querySelector('#flightField').value
-    console.log(destination)
+    const iata = getIataFromJSON(destination)
+    console.log(iata)
 
     const optionsObj = {
         dep_iata: 'JFK',
-        arr_iata: destination,
+        arr_iata: iata,
         flight_status: 'scheduled',
         limit: 10,
     }
@@ -24,14 +25,23 @@ async function handleClick() {
         const cols = document.querySelectorAll('.col')
         cols.forEach(col => col.remove())
         document.querySelector('#flights').innerHTML = cards
-
-        console.log(cards)
     } catch (error) {
         console.error(error)
     }
 }
 
 document.querySelector('#searchFlights').addEventListener('click', handleClick)
+
+function getIataFromJSON(city) {
+    fetch('./iataCityMap.json')
+        .then(response => response.json())
+        .then(data => {
+            const iataCode = data[city]
+            console.log(iataCode)
+            return iataCode
+        })
+        .catch(error => console.error(error))
+}
 
 /*
     const access_key = '6d43e0c1a76a587aa7916067ef626d0a'
