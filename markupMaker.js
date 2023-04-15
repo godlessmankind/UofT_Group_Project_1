@@ -1,3 +1,13 @@
+function makePrettyDate(timestamp) {
+    const date = new Date(timestamp);
+    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    return `${formattedDate}`
+}
+
+function makeFirstLetterUppercase(str) {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+}
+
 function makeTimestamp(timestamp) {
     const dateStr = `${timestamp}`;
     const dateObj = new Date(dateStr);
@@ -23,20 +33,22 @@ function createFlightCards({data}) {
         const flight = data[i]
         console.log(flight)
         markup += `
-            <div class="col">
+            <div class="col" style="margin-bottom:1rem">
             <div class="card" style="width: 18rem;">
-            <div class="card-body">
-            <h5 class="card-title">${flight.arrival.airport}</h5>
+            <div class="card-header">
+            <h5 class="card-title"><b>Arrival Airport:</b><br/>${flight.arrival.airport}</h5>
             <p class="card-text"></p>
             </div>
             <ul class="list-group list-group-flush">
-            <li class="list-group-item">Flight Duration: ${calculateFlightDuration(flight.departure.scheduled, flight.arrival.scheduled)}</li>
+            <li class="list-group-item">Airline: ${flight.airline.name}</li>
+            <li class="list-group-item">Flight Number: ${flight.flight.number}</li>
             <li class="list-group-item">Date: ${makeTimestamp(flight.flight_date)}</li>
-            <li class="list-group-item">Departure Time: ${flight.arrival.scheduled}</li>
+            <li class="list-group-item">Flight Duration: ${calculateFlightDuration(flight.departure.scheduled, flight.arrival.scheduled)}</li>
+            <li class="list-group-item">Scheduled Departure: ${makePrettyDate(flight.departure.scheduled)}</li>
+            <li class="list-group-item">Scheduled Arrival: ${makePrettyDate(flight.arrival.scheduled)}</li>
             </ul>
             <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
+                Flight Status: ${makeFirstLetterUppercase(flight.flight_status)}
             </div>
             </div>
             </div>
